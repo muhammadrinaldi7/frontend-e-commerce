@@ -7,7 +7,7 @@ import { FormatRupiah, proxiedUrl } from "@/lib/utils";
 import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -15,7 +15,7 @@ export default function CartPage() {
   const { data: products, isLoading } = useFetchAllProducts(
     `https://backend-ecommerce.rndev.my.id/api/products`
   );
-  const { cartItems, incQty, decQty } = useCartStore();
+  const { cartItems, incQty, decQty, removeFromCart } = useCartStore();
   const productsData = products?.data || [];
 
   // Gabungkan cartItem dengan data produk lengkap
@@ -72,9 +72,7 @@ export default function CartPage() {
                       className="flex border-b border-black items-center gap-4"
                     >
                       <Image
-                        src={proxiedUrl(
-                          `https://backend-ecommerce.rndev.my.id/public/${product.image_product}`
-                        )}
+                        src={proxiedUrl(product.image_product)}
                         alt={product?.product_name || "cart"}
                         width={1000}
                         height={1000}
@@ -114,29 +112,18 @@ export default function CartPage() {
                           </div>
                           <button
                             onClick={() => incQty(product?.id || "")}
-                            className="text-gray-600 text-xs transition hover:text-red-600"
+                            className="text-gray-600 text-xs transition hover:text-green-600"
                           >
                             <FontAwesomeIcon icon={faPlus} />
                           </button>
                         </div>
 
-                        <button className="text-gray-600 transition hover:text-red-600">
+                        <button
+                          onClick={() => removeFromCart(product?.id || "")}
+                          className="text-gray-600 transition hover:text-red-600"
+                        >
                           <span className="sr-only">Remove item</span>
-
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="size-4"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                            />
-                          </svg>
+                          <FontAwesomeIcon icon={faTrash} className="size-4" />
                         </button>
                       </div>
                     </li>

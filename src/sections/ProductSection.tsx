@@ -9,11 +9,10 @@ import Image from "next/image";
 
 export default function ProductSection() {
   const { data: products, isLoading } = useFetchAllProducts(
-    "https://backend-ecommerce.rndev.my.id/api/products"
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}products`
   );
   const productsData = products?.data.slice(0, 4);
-  const { addToCart, cartItems, triggerShake } = useCartStore();
-  console.log(cartItems);
+  const { addToCart, triggerShake } = useCartStore();
   const handleAddToCart = (product: CartItem) => {
     addToCart(product);
     triggerShake();
@@ -44,9 +43,7 @@ export default function ProductSection() {
                 <Image
                   width={1000}
                   height={1000}
-                  src={proxiedUrl(
-                    `https://backend-ecommerce.rndev.my.id/public/${product.image_product}`
-                  )}
+                  src={proxiedUrl(product.image_product)}
                   alt={product.product_name}
                   className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                 />

@@ -10,10 +10,7 @@ import {
 export const useActionAuth = (url: string) => {
   const { mutate: Login } = useMutation({
     mutationFn: async (payload: LoginPayload) => {
-      const res = await axiosClient.post<ResponseDefault<LoginResponse>>(
-        url,
-        payload
-      );
+      const res = await axiosClient.post<LoginResponse>(url, payload);
       return res.data;
     },
   });

@@ -54,13 +54,13 @@ export const useCartStore = create<CartState>((set) => ({
     })),
   decQty: (id: string) =>
     set((state) => ({
-      cartItems: state.cartItems.map((item) => ({
-        ...item,
-        quantity:
-          item.product_id === id && item.quantity > 1
-            ? item.quantity - 1
-            : item.quantity,
-      })),
+      cartItems: state.cartItems
+        .map((item) =>
+          item.product_id === id
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0),
     })),
   // khusus untuk animasi
   isShaking: false,

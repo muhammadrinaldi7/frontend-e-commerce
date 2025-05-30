@@ -1,12 +1,22 @@
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping, faZ } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightToBracket,
+  faCartShopping,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCartStore } from "@/store/useCartStore";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Cookies from "js-cookie";
+import { proxiedUrl } from "@/lib/utils";
+import LogoutModal from "./ModalsLogout";
+import { useProfileStore } from "@/store/profileStore";
 export default function Navbar() {
+  const [showLogout, setShowLogout] = useState(false);
+  const [auth, setAuth] = useState(false);
   const menus = [
     {
       name: "Home",
@@ -23,14 +33,30 @@ export default function Navbar() {
   ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { profile } = useProfileStore();
   useEffect(() => {
+    if (Cookies.get("token") && profile) {
+      try {
+        setAuth(true);
+      } catch (e) {
+        console.error("Failed to parse user from sessionStorage", e);
+        setAuth(false);
+      }
+    }
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [profile]);
   const handleOpen = () => setOpen(!open);
   const router = useRouter();
   const { cartItems, isShaking, stopShake } = useCartStore();
+  const handleLogout = () => {
+    Cookies.remove("token");
+    sessionStorage.removeItem("user");
+    setAuth(false);
+    router.push("/");
+    setShowLogout(false);
+  };
   return (
     <header className="bg-white">
       <div
@@ -40,10 +66,26 @@ export default function Navbar() {
       >
         <div className="flex h-16 px-4 items-center justify-between">
           <div className="flex-1 md:flex md:items-center md:gap-12">
-            <a className="block text-[#FFD700]" href="#">
+            <div className="block text-[#FFD700]">
               <span className="sr-only">Home</span>
-              <FontAwesomeIcon icon={faZ} className="h-8" />
-            </a>
+              {auth ? (
+                <Image
+                  src={proxiedUrl(profile?.avatar)}
+                  width={1000}
+                  height={1000}
+                  className="h-8 rounded-full overflow-hidden w-auto"
+                  alt="Icon"
+                />
+              ) : (
+                <Image
+                  src="/favIcon.png"
+                  width={1000}
+                  height={1000}
+                  className="h-8 rounded-full overflow-hidden w-auto"
+                  alt="Icon"
+                />
+              )}
+            </div>
           </div>
 
           <div className="md:flex md:items-center md:gap-12">
@@ -70,28 +112,39 @@ export default function Navbar() {
                 transition={{ duration: 0.6 }}
                 onAnimationComplete={stopShake}
                 onClick={() => router.push("/carts")}
-                className="p-1 flex items-center cursor-pointer gap-2 border rounded-md border-black"
+                className="p-1 flex items-center cursor-pointer gap-2 border rounded-md border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white"
               >
                 <FontAwesomeIcon icon={faCartShopping} />
                 <span>{cartItems.length}</span>
               </motion.div>
-              <div className="sm:flex sm:gap-4">
-                <Link
-                  className="rounded-md hover:bg-indigo-600 border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:text-white shadow-sm"
-                  href="/login"
-                >
-                  Login
-                </Link>
-
-                <div className="hidden sm:flex">
-                  <a
-                    className="rounded-md bg-[#FFD700] hover:bg-white hover:border hover:border-[#FFD700] hover:text-[#FFD700] px-5 py-2.5 text-sm font-medium text-white"
-                    href="#"
+              {!auth ? (
+                <div className="sm:flex sm:gap-4">
+                  <Link
+                    className="rounded-md hover:bg-indigo-600 border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:text-white shadow-sm"
+                    href="/login"
                   >
-                    Register
-                  </a>
+                    Login
+                  </Link>
+
+                  <div className="hidden sm:flex">
+                    <Link
+                      className="rounded-md bg-[#FFD700] hover:bg-white hover:border hover:border-[#FFD700] hover:text-[#FFD700] px-5 py-2.5 text-sm font-medium text-white"
+                      href="/register"
+                    >
+                      Register
+                    </Link>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="sm:flex sm:gap-4">
+                  <button
+                    className="rounded-md bg-red-600 hover:bg-white hover:border hover:border-red-600 hover:text-red-600 px-5 py-2.5 text-sm font-medium text-white"
+                    onClick={() => setShowLogout(!showLogout)}
+                  >
+                    <FontAwesomeIcon icon={faArrowRightToBracket} />
+                  </button>
+                </div>
+              )}
 
               <div className="block md:hidden">
                 <motion.button
@@ -142,12 +195,27 @@ export default function Navbar() {
                       </Link>
                     </li>
                   ))}
+                  {!auth && (
+                    <li>
+                      <Link
+                        className="text-black font-semibold transition hover:text-black/75"
+                        href="/register"
+                      >
+                        Register
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </nav>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+      <LogoutModal
+        isOpen={showLogout}
+        onConfirm={handleLogout}
+        onClose={() => setShowLogout(false)}
+      />
     </header>
   );
 }

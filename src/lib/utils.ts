@@ -25,10 +25,11 @@ export function isValidUrl(url: string): boolean {
   }
 }
 export const proxiedUrl = (imageUrl: string | null | undefined) => {
-  if (!imageUrl || !isValidUrl(imageUrl)) {
-    return "/img/noimage.webp";
+  const urlImage = "https://backend-ecommerce.rndev.my.id/public/" + imageUrl;
+  if (!imageUrl || !isValidUrl(urlImage)) {
+    return "/noImage.png";
   }
   return `/api/image-proxy?url=${encodeURIComponent(
-    imageUrl || "/noImage.png"
+    urlImage || "/noImage.png"
   )}`;
 };
