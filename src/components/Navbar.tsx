@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCartStore } from "@/store/useCartStore";
+import { useRouter } from "next/navigation";
 export default function Navbar() {
   const menus = [
     {
       name: "Home",
-      href: "#home",
+      href: "/#home",
     },
     {
       name: "Product",
@@ -28,6 +29,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   const handleOpen = () => setOpen(!open);
+  const router = useRouter();
   const { cartItems, isShaking, stopShake } = useCartStore();
   return (
     <header className="bg-white">
@@ -67,6 +69,7 @@ export default function Navbar() {
                 }
                 transition={{ duration: 0.6 }}
                 onAnimationComplete={stopShake}
+                onClick={() => router.push("/carts")}
                 className="p-1 flex items-center cursor-pointer gap-2 border rounded-md border-black"
               >
                 <FontAwesomeIcon icon={faCartShopping} />

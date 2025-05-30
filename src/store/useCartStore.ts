@@ -9,6 +9,10 @@ export interface CartState {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string) => void;
+  incQty: (id: string) => void;
+  decQty: (id: string) => void;
+
+  // Animation
   isShaking: boolean;
   triggerShake: () => void;
   stopShake: () => void;
@@ -42,7 +46,22 @@ export const useCartStore = create<CartState>((set) => ({
     set((state) => ({
       cartItems: state.cartItems.filter((item) => item.product_id !== id),
     })),
-
+  incQty: (id: string) =>
+    set((state) => ({
+      cartItems: state.cartItems.map((item) =>
+        item.product_id === id ? { ...item, quantity: item.quantity + 1 } : item
+      ),
+    })),
+  decQty: (id: string) =>
+    set((state) => ({
+      cartItems: state.cartItems.map((item) => ({
+        ...item,
+        quantity:
+          item.product_id === id && item.quantity > 1
+            ? item.quantity - 1
+            : item.quantity,
+      })),
+    })),
   // khusus untuk animasi
   isShaking: false,
   triggerShake: () => set({ isShaking: true }),

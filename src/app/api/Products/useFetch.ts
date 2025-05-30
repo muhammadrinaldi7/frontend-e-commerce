@@ -13,3 +13,13 @@ export const useFetchAllProducts = (url: string) => {
     },
   });
 };
+
+export const useFetchDetailProduct = (url: string) => {
+  return useQuery({
+    queryKey: ["detailProduct", url],
+    queryFn: async () => {
+      const res = await axiosClient.get<ResponseDefault<ProductResponse>>(url);
+      return res.data;
+    },
+  });
+};
