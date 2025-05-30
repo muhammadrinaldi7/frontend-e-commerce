@@ -8,6 +8,8 @@ import Spinner from "@/components/Spinner";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const { data: products, isLoading } = useFetchAllProducts(
@@ -28,7 +30,12 @@ export default function CartPage() {
     (total, product) => total + (product.price || 0) * product.quantity,
     0
   );
-  console.log(totalPrice);
+  const router = useRouter();
+  const handleToCheckout = () => {
+    if (cartWithProductDetails.length > 0) {
+      router.push("/checkout");
+    }
+  };
   return (
     <>
       <section>
@@ -147,12 +154,19 @@ export default function CartPage() {
                   </dl>
 
                   <div className="flex justify-end">
-                    <a
-                      href="#"
-                      className="block rounded-sm bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
+                    <Button
+                      disabled={
+                        cartWithProductDetails.length === 0 && isLoading
+                      }
+                      onClick={handleToCheckout}
+                      className={`${
+                        cartWithProductDetails.length === 0 || isLoading
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      } rounded-sm flex items-center justify-center bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600`}
                     >
                       Checkout
-                    </a>
+                    </Button>
                   </div>
                 </div>
               </div>

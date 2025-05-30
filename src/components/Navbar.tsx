@@ -14,11 +14,11 @@ export default function Navbar() {
     },
     {
       name: "Product",
-      href: "#product",
+      href: "/#product",
     },
     {
       name: "Contact",
-      href: "#contact",
+      href: "/#contact",
     },
   ];
   const [scrolled, setScrolled] = useState(false);
@@ -76,12 +76,12 @@ export default function Navbar() {
                 <span>{cartItems.length}</span>
               </motion.div>
               <div className="sm:flex sm:gap-4">
-                <a
+                <Link
                   className="rounded-md hover:bg-indigo-600 border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:text-white shadow-sm"
-                  href="#"
+                  href="/login"
                 >
                   Login
-                </a>
+                </Link>
 
                 <div className="hidden sm:flex">
                   <a

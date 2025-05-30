@@ -71,7 +71,7 @@ export default function ProductSection() {
                       }
                       className="p-2 text-sm cursor-pointer rounded-lg border-indigo-600 hover:bg-blue-600 hover:text-white border text-indigo-600 drop-shadow-xl"
                     >
-                      Add to Cart
+                      Add to Cart{" "}
                       <FontAwesomeIcon icon={faCartPlus} className="" />
                     </button>
                   </div>
