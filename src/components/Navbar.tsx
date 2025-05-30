@@ -28,7 +28,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   const handleOpen = () => setOpen(!open);
-  const { cartItems } = useCartStore();
+  const { cartItems, isShaking, stopShake } = useCartStore();
   return (
     <header className="bg-white">
       <div
@@ -61,13 +61,20 @@ export default function Navbar() {
             </nav>
 
             <div className="flex items-center gap-4">
-              <div className="p-1 flex items-center gap-2 border rounded-md border-black">
+              <motion.div
+                animate={
+                  isShaking ? { rotate: [0, -15, 15, -10, 10, -5, 5, 0] } : {}
+                }
+                transition={{ duration: 0.6 }}
+                onAnimationComplete={stopShake}
+                className="p-1 flex items-center cursor-pointer gap-2 border rounded-md border-black"
+              >
                 <FontAwesomeIcon icon={faCartShopping} />
                 <span>{cartItems.length}</span>
-              </div>
+              </motion.div>
               <div className="sm:flex sm:gap-4">
                 <a
-                  className="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm"
+                  className="rounded-md hover:bg-indigo-600 border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:text-white shadow-sm"
                   href="#"
                 >
                   Login
@@ -75,7 +82,7 @@ export default function Navbar() {
 
                 <div className="hidden sm:flex">
                   <a
-                    className="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600"
+                    className="rounded-md bg-[#FFD700] hover:bg-white hover:border hover:border-[#FFD700] hover:text-[#FFD700] px-5 py-2.5 text-sm font-medium text-white"
                     href="#"
                   >
                     Register

@@ -12,9 +12,12 @@ export default function ProductSection() {
     "https://backend-ecommerce.rndev.my.id/api/products"
   );
   const productsData = products?.data.slice(0, 4);
-  const { addToCart, cartItems } = useCartStore();
+  const { addToCart, cartItems, triggerShake } = useCartStore();
   console.log(cartItems);
-  const handleAddToCart = (product: CartItem) => addToCart(product);
+  const handleAddToCart = (product: CartItem) => {
+    addToCart(product);
+    triggerShake();
+  };
   return (
     <section id="product">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -30,7 +33,11 @@ export default function ProductSection() {
         </header>
 
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {isLoading && <Spinner />}
+          {isLoading && (
+            <li className="flex items-center w-full col-span-4 justify-center">
+              <Spinner />
+            </li>
+          )}
           {productsData?.map((product, index) => (
             <li key={index}>
               <div className="group block overflow-hidden">
