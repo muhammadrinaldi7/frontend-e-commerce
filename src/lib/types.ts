@@ -36,3 +36,35 @@ export interface UserResponse {
   role: string;
   avatar: string;
 }
+
+export interface LoginPayload {
+  email: string;
+  password: string;
+}
+export interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+  avatar: File | null;
+}
+
+export interface LoginResponse {
+  token: string;
+  user: UserResponse;
+}
+
+export interface CategoryResponse {
+  id: string;
+  category_name: string;
+}
+export interface ProductResponse {
+  id: string;
+  category_id: string;
+  product_name: string;
+  price: number;
+  qty: number;
+  image_product: string;
+  gallery_product: string[];
+  description: string;
+  category: CategoryResponse;
+}

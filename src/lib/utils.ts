@@ -15,3 +15,20 @@ export const FormatRupiah = (value: number) => {
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export function isValidUrl(url: string): boolean {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+export const proxiedUrl = (imageUrl: string | null | undefined) => {
+  if (!imageUrl || !isValidUrl(imageUrl)) {
+    return "/img/noimage.webp";
+  }
+  return `/api/image-proxy?url=${encodeURIComponent(
+    imageUrl || "/noImage.png"
+  )}`;
+};

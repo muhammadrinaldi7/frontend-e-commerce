@@ -1,6 +1,20 @@
-import { FormatRupiah } from "@/lib/utils";
+"use client";
+import { useFetchAllProducts } from "@/app/api/Products/useFetch";
+import Spinner from "@/components/Spinner";
+import { FormatRupiah, proxiedUrl } from "@/lib/utils";
+import { CartItem, useCartStore } from "@/store/useCartStore";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
 export default function ProductSection() {
+  const { data: products, isLoading } = useFetchAllProducts(
+    "https://backend-ecommerce.rndev.my.id/api/products"
+  );
+  const productsData = products?.data.slice(0, 4);
+  const { addToCart, cartItems } = useCartStore();
+  console.log(cartItems);
+  const handleAddToCart = (product: CartItem) => addToCart(product);
   return (
     <section id="product">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -16,101 +30,48 @@ export default function ProductSection() {
         </header>
 
         <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <li>
-            <a href="#" className="group block overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-              />
+          {isLoading && <Spinner />}
+          {productsData?.map((product, index) => (
+            <li key={index}>
+              <div className="group block overflow-hidden">
+                <Image
+                  width={1000}
+                  height={1000}
+                  src={proxiedUrl(
+                    `https://backend-ecommerce.rndev.my.id/public/${product.image_product}`
+                  )}
+                  alt={product.product_name}
+                  className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
+                />
 
-              <div className="relative bg-white pt-3">
-                <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                  Basic Tee
-                </h3>
-
-                <p className="mt-2">
-                  <span className="sr-only"> Harga </span>
-
-                  <span className="tracking-wider text-gray-900">
-                    {FormatRupiah(25000)}
-                  </span>
-                </p>
+                <div className="relative bg-white pt-3">
+                  <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                    {product.product_name}
+                  </h3>
+                  <div className="flex justify-between items-center">
+                    <p className="mt-2">
+                      <span className="sr-only"> Harga </span>
+                      <span className="tracking-wider text-gray-900">
+                        {FormatRupiah(product.price)}
+                      </span>
+                    </p>
+                    <button
+                      onClick={() =>
+                        handleAddToCart({
+                          product_id: product.id,
+                          quantity: 1,
+                        })
+                      }
+                      className="p-2 text-sm cursor-pointer rounded-lg border-indigo-600 hover:bg-blue-600 hover:text-white border text-indigo-600 drop-shadow-xl"
+                    >
+                      Add to Cart
+                      <FontAwesomeIcon icon={faCartPlus} className="" />
+                    </button>
+                  </div>
+                </div>
               </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#" className="group block overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-              />
-
-              <div className="relative bg-white pt-3">
-                <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                  Basic Tee
-                </h3>
-
-                <p className="mt-2">
-                  <span className="sr-only"> Harga </span>
-
-                  <span className="tracking-wider text-gray-900">
-                    {FormatRupiah(25000)}
-                  </span>
-                </p>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#" className="group block overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-              />
-
-              <div className="relative bg-white pt-3">
-                <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                  Basic Tee
-                </h3>
-
-                <p className="mt-2">
-                  <span className="sr-only"> Harga </span>
-
-                  <span className="tracking-wider text-gray-900">
-                    {FormatRupiah(25000)}
-                  </span>
-                </p>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#" className="group block overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt=""
-                className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
-              />
-
-              <div className="relative bg-white pt-3">
-                <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
-                  Basic Tee
-                </h3>
-
-                <p className="mt-2">
-                  <span className="sr-only"> Harga </span>
-
-                  <span className="tracking-wider text-gray-900">
-                    {FormatRupiah(25000)}
-                  </span>
-                </p>
-              </div>
-            </a>
-          </li>
+            </li>
+          ))}
         </ul>
         <div className="w-full flex justify-center items-center">
           <a
