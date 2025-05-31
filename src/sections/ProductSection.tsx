@@ -6,6 +6,7 @@ import { CartItem, useCartStore } from "@/store/useCartStore";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function ProductSection() {
   const { data: products, isLoading } = useFetchAllProducts(
@@ -78,12 +79,12 @@ export default function ProductSection() {
           ))}
         </ul>
         <div className="w-full flex justify-center items-center">
-          <a
-            href="#"
+          <Link
+            href="/products"
             className="mt-8 inline-block rounded-full border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:ring-3 focus:outline-hidden"
           >
             Lihat Selengkapnya
-          </a>
+          </Link>
         </div>
       </div>
     </section>

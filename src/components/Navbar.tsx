@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,7 +17,6 @@ import LogoutModal from "./ModalsLogout";
 import { useProfileStore } from "@/store/profileStore";
 export default function Navbar() {
   const [showLogout, setShowLogout] = useState(false);
-  const [auth, setAuth] = useState(false);
   const menus = [
     {
       name: "Home",
@@ -33,27 +33,28 @@ export default function Navbar() {
   ];
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const { profile } = useProfileStore();
+  const { profile, logout, isAuthenticated, setProfile } = useProfileStore();
   useEffect(() => {
-    if (Cookies.get("token") && profile) {
+    const token = Cookies.get("token");
+    const user = sessionStorage.getItem("user");
+    if (token && user && !profile) {
       try {
-        setAuth(true);
-      } catch (e) {
-        console.error("Failed to parse user from sessionStorage", e);
-        setAuth(false);
+        const parsed = JSON.parse(user);
+        setProfile(parsed);
+      } catch {
+        console.error("Gagal parse user");
       }
     }
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, [profile]);
+  }, []);
   const handleOpen = () => setOpen(!open);
   const router = useRouter();
   const { cartItems, isShaking, stopShake } = useCartStore();
   const handleLogout = () => {
     Cookies.remove("token");
-    sessionStorage.removeItem("user");
-    setAuth(false);
+    logout();
     router.push("/");
     setShowLogout(false);
   };
@@ -68,7 +69,7 @@ export default function Navbar() {
           <div className="flex-1 md:flex md:items-center md:gap-12">
             <div className="block text-[#FFD700]">
               <span className="sr-only">Home</span>
-              {auth ? (
+              {isAuthenticated ? (
                 <Image
                   src={proxiedUrl(profile?.avatar)}
                   width={1000}
@@ -117,7 +118,7 @@ export default function Navbar() {
                 <FontAwesomeIcon icon={faCartShopping} />
                 <span>{cartItems.length}</span>
               </motion.div>
-              {!auth ? (
+              {!isAuthenticated ? (
                 <div className="sm:flex sm:gap-4">
                   <Link
                     className="rounded-md hover:bg-indigo-600 border border-indigo-600 text-indigo-600 px-5 py-2.5 text-sm font-medium hover:text-white shadow-sm"
@@ -195,7 +196,7 @@ export default function Navbar() {
                       </Link>
                     </li>
                   ))}
-                  {!auth && (
+                  {!isAuthenticated && (
                     <li>
                       <Link
                         className="text-black font-semibold transition hover:text-black/75"
