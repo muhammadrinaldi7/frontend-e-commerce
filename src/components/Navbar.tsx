@@ -31,6 +31,17 @@ export default function Navbar() {
       href: "/#contact",
     },
   ];
+  const profileMenus = [
+    {
+      name: "Pesanan",
+      href: "/orders",
+    },
+    {
+      name: "Logout",
+      href: "#",
+    },
+  ];
+  const [profileOpen, setProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { profile, logout, isAuthenticated, setProfile } = useProfileStore();
@@ -74,6 +85,7 @@ export default function Navbar() {
                   src={proxiedUrl(profile?.avatar)}
                   width={1000}
                   height={1000}
+                  onClick={() => setProfileOpen(!profileOpen)}
                   className="h-8 rounded-full overflow-hidden w-auto"
                   alt="Icon"
                 />
@@ -217,6 +229,23 @@ export default function Navbar() {
         onConfirm={handleLogout}
         onClose={() => setShowLogout(false)}
       />
+      {isAuthenticated && profileOpen && (
+        <div className="fixed inset-0 w-fit h-fit rounded-lg top-20 md:left-10 left-6 z-40 bg-white/85">
+          <div className="flex flex-col rounded-lg p-4">
+            <div className="flex flex-col gap-3">
+              {profileMenus.map((menuProf, index) => (
+                <Link
+                  key={index}
+                  className="text-black font-semibold transition hover:text-black/75"
+                  href={menuProf.href}
+                >
+                  {menuProf.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

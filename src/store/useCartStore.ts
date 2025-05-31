@@ -11,7 +11,7 @@ export interface CartState {
   removeFromCart: (id: string) => void;
   incQty: (id: string) => void;
   decQty: (id: string) => void;
-
+  resetCart: () => void;
   // Animation
   isShaking: boolean;
   triggerShake: () => void;
@@ -62,6 +62,8 @@ export const useCartStore = create<CartState>((set) => ({
         )
         .filter((item) => item.quantity > 0),
     })),
+  resetCart: () => set({ cartItems: [] }),
+
   // khusus untuk animasi
   isShaking: false,
   triggerShake: () => set({ isShaking: true }),

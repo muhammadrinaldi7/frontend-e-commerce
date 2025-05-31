@@ -10,15 +10,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
+import { useProfileStore } from "@/store/profileStore";
+import CheckoutModal from "@/components/ModalsCheckout";
+import { useState } from "react";
 
 export default function CartPage() {
+  const [isOpen, setIsOpen] = useState(false);
   const { data: products, isLoading } = useFetchAllProducts(
     `https://backend-ecommerce.rndev.my.id/api/products`
   );
   const { cartItems, incQty, decQty, removeFromCart } = useCartStore();
   const productsData = products?.data || [];
 
-  // Gabungkan cartItem dengan data produk lengkap
   const cartWithProductDetails = cartItems.map((cartItem) => {
     const product = productsData.find((p) => p.id === cartItem.product_id);
     return {
@@ -31,14 +35,23 @@ export default function CartPage() {
     0
   );
   const router = useRouter();
-  const handleToCheckout = () => {
-    if (cartWithProductDetails.length > 0) {
-      router.push("/checkout");
+  const { isAuthenticated } = useProfileStore();
+  console.log(cartItems);
+
+  const handleCheckOut = () => {
+    if (!isAuthenticated) {
+      toast.error("Silahkan login terlebih dahulu");
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } else {
+      setIsOpen(!isOpen);
     }
   };
   return (
     <>
       <section>
+        <Toaster position="top-right" />
         <div className="mx-auto max-w-screen-xl px-4 py-20 sm:px-6">
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
@@ -142,10 +155,10 @@ export default function CartPage() {
 
                   <div className="flex justify-end">
                     <Button
+                      onClick={handleCheckOut}
                       disabled={
                         cartWithProductDetails.length === 0 && isLoading
                       }
-                      onClick={handleToCheckout}
                       className={`${
                         cartWithProductDetails.length === 0 || isLoading
                           ? "cursor-not-allowed"
@@ -160,6 +173,11 @@ export default function CartPage() {
             </div>
           </div>
         </div>
+        <CheckoutModal
+          items={cartItems}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+        />
       </section>
     </>
   );

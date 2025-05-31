@@ -1,7 +1,20 @@
+import { CartItem } from "@/store/useCartStore";
+
 export interface ResponseDefault<T> {
   success: boolean;
   message: string;
   data: T;
+}
+
+export interface PaymentResponse {
+  invoice_url: string;
+  invoice_id: string;
+}
+
+export interface OrdersPayload {
+  user_id: string;
+  shipping_address: string;
+  items: CartItem[];
 }
 
 export interface ErrorResponse {
@@ -67,4 +80,13 @@ export interface ProductResponse {
   gallery_product: string[];
   description: string;
   category: CategoryResponse;
+}
+
+export interface OrdersResponse {
+  id: string;
+  user_id: string;
+  shipping_address: string;
+  status: string;
+  total_price: number;
+  order_date: string;
 }

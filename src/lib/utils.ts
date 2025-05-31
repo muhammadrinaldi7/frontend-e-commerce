@@ -33,3 +33,11 @@ export const proxiedUrl = (imageUrl: string | null | undefined) => {
     urlImage || "/noImage.png"
   )}`;
 };
+
+export const FormatDate = (date: string) => {
+  return new Date(date).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
