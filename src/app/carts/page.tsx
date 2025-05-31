@@ -14,6 +14,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useProfileStore } from "@/store/profileStore";
 import CheckoutModal from "@/components/ModalsCheckout";
 import { useState } from "react";
+import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 
 export default function CartPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +54,12 @@ export default function CartPage() {
       <section>
         <Toaster position="top-right" />
         <div className="mx-auto max-w-screen-xl px-4 py-20 sm:px-6">
+          <BreadcrumbsSeparator
+            items={[
+              { label: "Product", href: "/products" },
+              { label: "Keranjang" },
+            ]}
+          />
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
               <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">

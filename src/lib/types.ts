@@ -19,7 +19,7 @@ export interface OrdersPayload {
 
 export interface ErrorResponse {
   success: boolean;
-  message: string;
+  message: string | "error";
 }
 export interface LinkResponse {
   url: string;
@@ -77,7 +77,7 @@ export interface ProductResponse {
   price: number;
   qty: number;
   image_product: string;
-  gallery_product: string[];
+  gallery_product: string;
   description: string;
   category: CategoryResponse;
 }
@@ -89,4 +89,23 @@ export interface OrdersResponse {
   status: string;
   total_price: number;
   order_date: string;
+  details: DetailResponse[];
+  payment: PaymentResponse;
+}
+
+export interface PaymentResponse {
+  external_id: string;
+  id: string;
+  order_id: string;
+  payment_method: string;
+  payment_status: string | null;
+  payment_date: string;
+}
+
+export interface DetailResponse {
+  id: string;
+  product_id: string;
+  order_id: string;
+  quantity: number;
+  product: ProductResponse;
 }

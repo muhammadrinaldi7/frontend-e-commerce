@@ -13,6 +13,8 @@ import { useMemo, useState } from "react";
 import { ProductResponse } from "@/lib/types";
 import { useFetchAllCategories } from "../api/Category/useFetch";
 import { CartItem, useCartStore } from "@/store/useCartStore";
+import Link from "next/link";
+import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 
 export default function ProductsPage() {
   const [searchProduct, setSearchProduct] = useState("");
@@ -44,7 +46,8 @@ export default function ProductsPage() {
   return (
     <section>
       <div className="mx-auto max-w-screen-xl min-h-screen flex flex-col px-4 py-20">
-        <header>
+        <BreadcrumbsSeparator items={[{ label: "Product" }]} />
+        <header className="">
           <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
             Product Collection
           </h2>
@@ -95,7 +98,10 @@ export default function ProductsPage() {
           ) : (
             displayedProducts.map((product: ProductResponse, index: string) => (
               <li key={index}>
-                <div className="group block overflow-hidden">
+                <Link
+                  href={`/products/${product.id}`}
+                  className="group block overflow-hidden"
+                >
                   <Image
                     width={1000}
                     height={1000}
@@ -126,7 +132,7 @@ export default function ProductsPage() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link>
               </li>
             ))
           )}
