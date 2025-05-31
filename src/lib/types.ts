@@ -46,10 +46,17 @@ export interface UserResponse {
   id: string;
   name: string;
   email: string;
-  role: string;
+  is_admin: number;
   avatar: string;
 }
 
+export interface DashboardResponse {
+  product: number;
+  order: number;
+  user: number;
+  notDelivered: number;
+  category: number;
+}
 export interface LoginPayload {
   email: string;
   password: string;
@@ -108,4 +115,14 @@ export interface DetailResponse {
   order_id: string;
   quantity: number;
   product: ProductResponse;
+}
+
+export interface ProductPayload {
+  category_id: string;
+  product_name: string;
+  price: number;
+  qty: number;
+  image_product: File | null;
+  gallery_product: string | null;
+  description: string;
 }

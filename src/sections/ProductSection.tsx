@@ -7,12 +7,12 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
-
+import { motion } from "motion/react";
 export default function ProductSection() {
   const { data: products, isLoading } = useFetchAllProducts(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}products`
   );
-  const productsData = products?.data.slice(0, 4);
+  const productsData = products?.data.slice(0, 5);
   const { addToCart, triggerShake } = useCartStore();
   const handleAddToCart = (product: CartItem) => {
     addToCart(product);
@@ -39,7 +39,13 @@ export default function ProductSection() {
             </li>
           )}
           {productsData?.map((product, index) => (
-            <li key={index}>
+            <motion.li
+              key={index}
+              initial={{ opacity: 0, y: 20, scale: 0.5 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              viewport={{ once: false }}
+            >
               <div className="group block overflow-hidden">
                 <Image
                   width={1000}
@@ -75,7 +81,7 @@ export default function ProductSection() {
                   </div>
                 </div>
               </div>
-            </li>
+            </motion.li>
           ))}
         </ul>
         <div className="w-full flex justify-center items-center">

@@ -8,6 +8,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "./ui/breadcrumb";
+import { useProfileStore } from "@/store/profileStore";
 
 type Crumb = {
   label: string;
@@ -19,11 +20,16 @@ interface BreadcrumbsSeparatorProps {
 }
 
 export const BreadcrumbsSeparator = ({ items }: BreadcrumbsSeparatorProps) => {
+  const { isAdmin } = useProfileStore();
   const getFirstItem = () => {
     return (
       <>
         <BreadcrumbItem>
-          <Link href="/">Home</Link>
+          {isAdmin ? (
+            <Link href="/admin/dashboard">Dashboard</Link>
+          ) : (
+            <Link href="/">Home</Link>
+          )}
         </BreadcrumbItem>
         <BreadcrumbSeparator>/</BreadcrumbSeparator>
       </>

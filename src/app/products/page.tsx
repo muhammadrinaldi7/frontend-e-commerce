@@ -15,7 +15,7 @@ import { useFetchAllCategories } from "../api/Category/useFetch";
 import { CartItem, useCartStore } from "@/store/useCartStore";
 import Link from "next/link";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
-
+import { motion } from "motion/react";
 export default function ProductsPage() {
   const [searchProduct, setSearchProduct] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -97,7 +97,13 @@ export default function ProductsPage() {
             </li>
           ) : (
             displayedProducts.map((product: ProductResponse, index: string) => (
-              <li key={index}>
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, y: 20, scale: 0.5 }} // animasi awal
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                viewport={{ once: false }}
+              >
                 <Link
                   href={`/products/${product.id}`}
                   className="group block overflow-hidden"
@@ -133,7 +139,7 @@ export default function ProductsPage() {
                     </div>
                   </div>
                 </Link>
-              </li>
+              </motion.li>
             ))
           )}
         </ul>

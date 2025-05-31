@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 export interface ProfileState {
   profile: UserResponse | null;
   isAuthenticated: boolean;
+  isAdmin: number;
   setProfile: (profile: UserResponse) => void;
   logout: () => void;
 }
@@ -13,7 +14,9 @@ export const useProfileStore = create<ProfileState>()(
     (set) => ({
       profile: null,
       isAuthenticated: false,
-      setProfile: (profile) => set({ profile, isAuthenticated: true }),
+      isAdmin: 0,
+      setProfile: (profile) =>
+        set({ profile, isAuthenticated: true, isAdmin: profile.is_admin }),
       logout: () => {
         sessionStorage.removeItem("user");
         set({ profile: null, isAuthenticated: false });

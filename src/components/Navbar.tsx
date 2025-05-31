@@ -31,16 +31,20 @@ export default function Navbar() {
       href: "/#contact",
     },
   ];
-  const profileMenus = [
-    {
-      name: "Pesanan",
-      href: "/orders",
-    },
-    {
-      name: "Logout",
-      href: "#",
-    },
-  ];
+  const { isAdmin } = useProfileStore();
+  const profileMenus = isAdmin
+    ? [
+        {
+          name: "Dashboard",
+          href: "/admin/dashboard",
+        },
+      ]
+    : [
+        {
+          name: "Pesanan",
+          href: "/orders",
+        },
+      ];
   const [profileOpen, setProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);

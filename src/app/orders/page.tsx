@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import DeleteModal from "@/components/ModalsDelete";
 import { useState } from "react";
 import { useActionOrder } from "../api/Orders/useAction";
+import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 
 export default function OrdersPage() {
   const { data: orders } = useFetchAllOrders();
@@ -59,7 +60,10 @@ export default function OrdersPage() {
   return (
     <>
       <Toaster position="top-right" />
-      <div className="w-full flex justify-center items-center px-8 py-24">
+      <div className="w-full flex flex-col justify-center  px-8 py-24">
+        <BreadcrumbsSeparator
+          items={[{ label: "Carts", href: "/carts" }, { label: "Orders" }]}
+        />
         <article className="rounded-xl w-full border border-indigo-600 bg-white p-4">
           <div className="flex items-center gap-4">
             <Image
@@ -103,8 +107,17 @@ export default function OrdersPage() {
                           )
                           .join(", ")}
                       </p>
-                      <p className="mt-1 text-xs font-medium text-gray-300">
-                        {FormatRupiah(order.total_price)}
+                      <p className="mt-1 text-xs items-center flex gap-2 font-medium text-gray-300">
+                        {FormatRupiah(order.total_price)}{" "}
+                        <span
+                          className={`rounded-full  px-2.5 items-center py-0.5 text-sm whitespace-nowrap ${
+                            order.status === "pending"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-green-100 text-green-800"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
                       </p>
                     </div>
                     <div className="flex gap-2">
