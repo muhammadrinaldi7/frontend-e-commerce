@@ -1,11 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../axiosClient";
 import {
+  CategoryResponse,
   DashboardResponse,
   ProductPayload,
   ProductResponse,
   ResponseDefault,
 } from "@/lib/types";
+import { CategoriesPayload } from "@/app/admin/categories/new/page";
 
 export const useActionAdmin = (url: string) => {
   const queryClient = useQueryClient();
@@ -63,9 +65,40 @@ export const useActionAdmin = (url: string) => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["allUsers", url] });
+      queryClient.invalidateQueries({ queryKey: ["Categories"] });
     },
   });
 
-  return { count, addProduct, deleteProduct, PromoteAdmin, uploadGallery };
+  const { mutate: deleteCategory } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await axiosClient.delete(`${url}${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Categories"] });
+    },
+  });
+
+  const { mutate: addCategory } = useMutation({
+    mutationFn: async (payload: CategoriesPayload) => {
+      const res = await axiosClient.post<ResponseDefault<CategoryResponse>>(
+        url,
+        payload
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Categories", url] });
+    },
+  });
+
+  return {
+    addCategory,
+    count,
+    addProduct,
+    deleteProduct,
+    deleteCategory,
+    PromoteAdmin,
+    uploadGallery,
+  };
 };

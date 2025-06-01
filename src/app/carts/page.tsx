@@ -37,7 +37,6 @@ export default function CartPage() {
   );
   const router = useRouter();
   const { isAuthenticated } = useProfileStore();
-  console.log(cartItems);
 
   const handleCheckOut = () => {
     if (!isAuthenticated) {
