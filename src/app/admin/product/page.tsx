@@ -1,17 +1,48 @@
 "use client";
+import { useActionAdmin } from "@/app/api/Admin/useAction";
 import { useFetchAllProducts } from "@/app/api/Products/useFetch";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
+import DeleteModal from "@/components/ModalsDelete";
 import { Button } from "@/components/ui/button";
-import { faImages } from "@fortawesome/free-solid-svg-icons";
+import { ErrorResponse } from "@/lib/types";
+import { faImages, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AxiosError } from "axios";
 import Link from "next/link";
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ProductList() {
+  const [productId, setProductId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const { deleteProduct } = useActionAdmin(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}products/`
+  );
   const { data: productData } = useFetchAllProducts(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}products`
   );
+
+  const handleOpenDelete = (id: string) => {
+    setProductId(id);
+    setIsOpen(true);
+  };
+  const handleConfirm = async (id: string) => {
+    if (!id) return;
+    await deleteProduct(id, {
+      onSuccess: () => {
+        toast.success("Product deleted successfully");
+        setIsOpen(false);
+      },
+      onError: (error) => {
+        const err = error as AxiosError<ErrorResponse>;
+        toast.error(err.response?.data.message || "error");
+        setIsOpen(false);
+      },
+    });
+  };
   return (
     <>
+      <Toaster position="top-right" />
       <div className="mx-auto container flex flex-col gap-4 px-8 py-20">
         <BreadcrumbsSeparator items={[{ label: "List Product" }]} />
         <div className="flex justify-between">
@@ -55,17 +86,23 @@ export default function ProductList() {
                         </Button>
                       </Link>
                     )}
-                    <Link href={`/admin/product/${item.id}`}>
-                      <Button className="bg-indigo-600 text-white hover:bg-white hover:text-indigo-600 hover:border-indigo-600 hover:border">
-                        Edit
-                      </Button>
-                    </Link>
+                    <Button
+                      onClick={() => handleOpenDelete(item.id)}
+                      className="bg-red-600 text-white hover:bg-white hover:text-red-600 hover:border-red-600 hover:border"
+                    >
+                      <FontAwesomeIcon icon={faTrashAlt} />
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <DeleteModal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onConfirm={() => handleConfirm(productId)}
+        />
       </div>
     </>
   );

@@ -5,9 +5,10 @@ import DeleteModal from "@/components/ModalsDelete";
 import TableDashboard from "@/components/TableDashboard";
 import { Button } from "@/components/ui/button";
 import DashboardPageLayout from "@/layouts/DashboardPageLayout";
-import { CategoryResponse } from "@/lib/types";
+import { CategoryResponse, ErrorResponse } from "@/lib/types";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -29,6 +30,11 @@ export default function CategoriesPage() {
     await deleteCategory(id, {
       onSuccess: () => {
         toast.success("Category deleted successfully");
+        setOpen(false);
+      },
+      onError: (error) => {
+        const err = error as AxiosError<ErrorResponse>;
+        toast.error(err.response?.data.message || "error");
         setOpen(false);
       },
     });

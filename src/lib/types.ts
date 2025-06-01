@@ -98,6 +98,7 @@ export interface OrdersResponse {
   order_date: string;
   details: DetailResponse[];
   payment: PaymentResponse;
+  user?: UserResponse;
 }
 
 export interface PaymentResponse {

@@ -13,3 +13,15 @@ export const useFetchAllOrders = () => {
     },
   });
 };
+
+export const useFetchOrdersAll = () => {
+  return useQuery({
+    queryKey: ["ordersAll"],
+    queryFn: async () => {
+      const res = await axiosClient.get<ResponseDefault<OrdersResponse[]>>(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}get-allOrders`
+      );
+      return res.data;
+    },
+  });
+};

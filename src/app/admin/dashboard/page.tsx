@@ -6,7 +6,6 @@ import {
   faArchive,
   faCommentDollar,
   faList,
-  faTruckArrowRight,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -39,12 +38,6 @@ export default function DashboardPage() {
               value={counter?.data?.order || 0}
               icon={faCommentDollar}
               linkref="/admin/orders"
-            />
-            <CardDashboard
-              title="Belum Terkirim"
-              value={counter?.data?.notDelivered || 0}
-              icon={faTruckArrowRight}
-              linkref="/admin/transactions"
             />
             <CardDashboard
               title="Total User"

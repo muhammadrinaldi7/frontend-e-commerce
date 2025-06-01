@@ -33,7 +33,7 @@ export default function DetailProduct() {
           <Carousel className="max-w-md rounded-xl overflow-hidden drop-shadow-lg">
             <CarouselContent className="flex gap-4">
               {gallery.map((item, index) => (
-                <CarouselItem key={index} className="bg-black rounded-xl gap-2">
+                <CarouselItem key={index} className="bg-white rounded-xl gap-2">
                   <Image
                     alt=""
                     width={1000}

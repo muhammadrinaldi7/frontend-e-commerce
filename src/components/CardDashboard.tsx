@@ -16,7 +16,7 @@ export const CardDashboard = ({
 }) => {
   return (
     <article
-      className={`flex justify-between items-center gap-4 rounded-lg border border-indigo-400 bg-white p-6 `}
+      className={`flex justify-between drop-shadow-xl items-center gap-4 rounded-lg border border-indigo-400 bg-white p-6 `}
     >
       <div className="flex gap-4">
         <span className="rounded-full flex items-center bg-blue-100 p-3 text-blue-600">

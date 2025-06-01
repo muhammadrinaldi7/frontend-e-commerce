@@ -3,6 +3,7 @@ import axiosClient from "../axiosClient";
 import {
   CategoryResponse,
   DashboardResponse,
+  OrdersResponse,
   ProductPayload,
   ProductResponse,
   ResponseDefault,
@@ -27,18 +28,18 @@ export const useActionAdmin = (url: string) => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["allProducts", url] });
+      queryClient.invalidateQueries({ queryKey: ["allProducts"] });
     },
   });
   const { mutate: deleteProduct } = useMutation({
     mutationFn: async (id: string) => {
       const res = await axiosClient.delete<ResponseDefault<ProductResponse>>(
-        `${url}/${id}`
+        `${url}${id}`
       );
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["allProducts", url] });
+      queryClient.invalidateQueries({ queryKey: ["allProducts"] });
     },
   });
   const { mutate: uploadGallery } = useMutation({
@@ -92,7 +93,35 @@ export const useActionAdmin = (url: string) => {
     },
   });
 
+  const { mutate: delivery } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await axiosClient.put<ResponseDefault<OrdersResponse>>(
+        `${url}${id}`,
+        {
+          status: "delivered",
+        }
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ordersAll"] });
+    },
+  });
+
+  // const { mutate: deleteProduct } = useMutation({
+  //   mutationFn: async (id: string) => {
+  //     const res = await axiosClient.delete<ResponseDefault<ProductResponse>>(
+  //       `${url}${id}`
+  //     );
+  //     return res.data;
+  //   },
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["allProducts"] });
+  //   },
+  // });
+
   return {
+    delivery,
     addCategory,
     count,
     addProduct,

@@ -4,7 +4,7 @@ import { ProductResponse, ResponseDefault } from "@/lib/types";
 
 export const useFetchAllProducts = (url: string) => {
   return useQuery({
-    queryKey: ["allProducts", url],
+    queryKey: ["allProducts"],
     queryFn: async () => {
       const res = await axiosClient.get<ResponseDefault<ProductResponse[]>>(
         url
