@@ -59,11 +59,12 @@ npm run dev
 ```bash
 src/
 ├── app/               # Halaman utama & routing App Router (Next.js 15)
+│  └── api/            # Custom hooks React Query (useFetch, useAction)
 ├── components/        # Reusable components seperti Table, Card, Button
 ├── store/             # Zustand store (authStore, cartStore, dsb)
-├── api/               # Custom hooks React Query (useFetchX, useMutationX)
-├── lib/               # Konfigurasi Axios, utilitas umum
-├── types/             # Tipe TypeScript (model dari API)
+├── lib/               # Utilitas umum dan types
+├── sections/          # Section untuk landing page
+├── layouts/           # Template layout
 ```
 
 ### 🔐 Login & Role
