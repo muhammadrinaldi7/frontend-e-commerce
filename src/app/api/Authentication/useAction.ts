@@ -16,6 +16,7 @@ export const useActionAuth = (url: string) => {
   });
   const { mutate: Register } = useMutation({
     mutationFn: async (payload: RegisterPayload) => {
+      axiosClient.defaults.headers.post["Content-Type"] = "multipart/form-data";
       const res = await axiosClient.post<ResponseDefault<LoginResponse>>(
         url,
         payload

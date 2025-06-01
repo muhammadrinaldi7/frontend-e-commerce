@@ -56,5 +56,16 @@ export const useActionAdmin = (url: string) => {
       queryClient.invalidateQueries({ queryKey: ["allProducts", url] });
     },
   });
-  return { count, addProduct, deleteProduct, uploadGallery };
+
+  const { mutate: PromoteAdmin } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await axiosClient.post(`${url}${id}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allUsers", url] });
+    },
+  });
+
+  return { count, addProduct, deleteProduct, PromoteAdmin, uploadGallery };
 };
