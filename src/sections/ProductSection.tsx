@@ -46,7 +46,10 @@ export default function ProductSection() {
               transition={{ duration: 1, ease: "easeOut" }}
               viewport={{ once: false }}
             >
-              <div className="group block overflow-hidden">
+              <Link
+                href={`/products/${product.id}`}
+                className="group block overflow-hidden"
+              >
                 <Image
                   width={1000}
                   height={1000}
@@ -80,7 +83,7 @@ export default function ProductSection() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             </motion.li>
           ))}
         </ul>
