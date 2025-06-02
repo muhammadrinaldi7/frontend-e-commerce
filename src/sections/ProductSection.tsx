@@ -12,7 +12,7 @@ export default function ProductSection() {
   const { data: products, isLoading } = useFetchAllProducts(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}products`
   );
-  const productsData = products?.data.slice(0, 5);
+  const productsData = products?.data.slice(0, 4);
   const { addToCart, triggerShake } = useCartStore();
   const handleAddToCart = (product: CartItem) => {
     addToCart(product);
