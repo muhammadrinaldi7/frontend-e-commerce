@@ -28,7 +28,7 @@ export default function Navbar() {
     },
     {
       name: "Contact",
-      href: "/#contact",
+      href: "/contacts",
     },
   ];
   const { isAdmin } = useProfileStore();
