@@ -38,11 +38,19 @@ export default function Navbar() {
           name: "Dashboard",
           href: "/admin/dashboard",
         },
+        {
+          name: "Profile",
+          href: "/profile",
+        },
       ]
     : [
         {
           name: "Pesanan",
           href: "/orders",
+        },
+        {
+          name: "Profile",
+          href: "/profile",
         },
       ];
   const [profileOpen, setProfileOpen] = useState(false);

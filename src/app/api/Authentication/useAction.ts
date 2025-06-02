@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../axiosClient";
 import {
   LoginPayload,
@@ -6,8 +6,11 @@ import {
   RegisterPayload,
   ResponseDefault,
 } from "@/lib/types";
-
+export interface UpdateAvatar {
+  avatar: File | null;
+}
 export const useActionAuth = (url: string) => {
+  const queryClient = useQueryClient();
   const { mutate: Login } = useMutation({
     mutationFn: async (payload: LoginPayload) => {
       const res = await axiosClient.post<LoginResponse>(url, payload);
@@ -30,5 +33,16 @@ export const useActionAuth = (url: string) => {
       return res.data;
     },
   });
-  return { Login, Register, PromoteAdmin };
+
+  const { mutate: updateAvatar } = useMutation({
+    mutationFn: async (payload: UpdateAvatar) => {
+      axiosClient.defaults.headers.post["Content-Type"] = "multipart/form-data";
+      const res = await axiosClient.post(`${url}`, payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+  });
+  return { Login, Register, updateAvatar, PromoteAdmin };
 };

@@ -48,6 +48,7 @@ export interface UserResponse {
   email: string;
   is_admin: number;
   avatar: string;
+  created_at: string;
 }
 
 export interface DashboardResponse {
