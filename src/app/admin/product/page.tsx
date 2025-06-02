@@ -5,7 +5,11 @@ import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 import DeleteModal from "@/components/ModalsDelete";
 import { Button } from "@/components/ui/button";
 import { ErrorResponse } from "@/lib/types";
-import { faImages, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileEdit,
+  faImages,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AxiosError } from "axios";
 import Link from "next/link";
@@ -86,6 +90,11 @@ export default function ProductList() {
                         </Button>
                       </Link>
                     )}
+                    <Link href={`/admin/product/update/${item.id}`}>
+                      <Button className="bg-indigo-600 text-white hover:bg-white hover:text-indigo-600 hover:border-indigo-600 hover:border">
+                        <FontAwesomeIcon icon={faFileEdit} />
+                      </Button>
+                    </Link>
                     <Button
                       onClick={() => handleOpenDelete(item.id)}
                       className="bg-red-600 text-white hover:bg-white hover:text-red-600 hover:border-red-600 hover:border"

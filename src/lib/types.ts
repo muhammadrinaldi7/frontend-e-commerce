@@ -128,3 +128,13 @@ export interface ProductPayload {
   gallery_product: string | null;
   description: string;
 }
+export interface updateProductPayload {
+  _method?: string;
+  category_id?: string;
+  product_name?: string;
+  price?: number;
+  qty?: number;
+  image_product?: File | string;
+  gallery_product?: string | null;
+  description?: string;
+}

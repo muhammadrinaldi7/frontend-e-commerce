@@ -7,6 +7,7 @@ import {
   ProductPayload,
   ProductResponse,
   ResponseDefault,
+  updateProductPayload,
 } from "@/lib/types";
 import { CategoriesPayload } from "@/app/admin/categories/new/page";
 
@@ -108,6 +109,20 @@ export const useActionAdmin = (url: string) => {
     },
   });
 
+  const { mutate: updateProduct } = useMutation({
+    mutationFn: async (payload: updateProductPayload) => {
+      axiosClient.defaults.headers.post["Content-Type"] = "multipart/form-data";
+      const res = await axiosClient.put<ResponseDefault<ProductResponse>>(
+        url,
+        payload
+      );
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["allProducts"] });
+    },
+  });
+
   // const { mutate: deleteProduct } = useMutation({
   //   mutationFn: async (id: string) => {
   //     const res = await axiosClient.delete<ResponseDefault<ProductResponse>>(
@@ -122,6 +137,7 @@ export const useActionAdmin = (url: string) => {
 
   return {
     delivery,
+    updateProduct,
     addCategory,
     count,
     addProduct,
