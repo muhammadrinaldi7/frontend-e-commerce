@@ -75,6 +75,15 @@ src/
 | User  | Login, tambah ke keranjang, checkout                           |
 | Admin | Login, kelola kategori, order & produk melalui dashboard admin |
 
+---
+
+## Login Sebagai Admin
+
+-   email : admin@zedgroup.test
+-   password : admin123
+
+---
+
 ### 🧑‍💻 Pengembang
 
 Author: Muhammad Rinaldi
