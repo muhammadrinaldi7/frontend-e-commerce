@@ -35,7 +35,12 @@ export default function OrdersPage() {
       { order_id: id },
       {
         onSuccess: (data) => {
-          window.open(data.data.invoice_url, "_blank", "noopener,noreferrer");
+          const newTab = window.open("", "_blank");
+          const url = data.data.invoice_url;
+          if (url && newTab) {
+            newTab.location.href = url;
+          }
+          // window.open(data.data.invoice_url, "_blank", "noopener,noreferrer");
         },
         onError: (error) => {
           const err = error as AxiosError<ErrorResponse>;
@@ -62,7 +67,6 @@ export default function OrdersPage() {
     setId(id);
     setIsOpen(true);
   };
-  console.log(orders?.data);
   return (
     <>
       <Toaster position="top-right" />
