@@ -7,7 +7,7 @@ export interface PaymentPayload {
 }
 export const usePaymentAction = (url: string) => {
   const queryClient = useQueryClient();
-  const { mutate: Payment } = useMutation({
+  const { mutate: Payment, isPending: loadingPayment } = useMutation({
     mutationFn: async (payload: PaymentPayload) => {
       const res = await axiosClient.post<ResponseDefault<PaymentResponse>>(
         url,
@@ -24,5 +24,5 @@ export const usePaymentAction = (url: string) => {
       });
     },
   });
-  return { Payment };
+  return { Payment, loadingPayment };
 };

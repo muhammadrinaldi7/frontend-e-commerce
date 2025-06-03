@@ -11,7 +11,7 @@ import {
   faTrash,
   faTruckDroplet,
 } from "@fortawesome/free-solid-svg-icons";
-import { usePaymentAction } from "../api/Payments/useAction";
+// import { usePaymentAction } from "../api/Payments/useAction";
 import { ErrorResponse } from "@/lib/types";
 import { AxiosError } from "axios";
 import DeleteModal from "@/components/ModalsDelete";
@@ -20,46 +20,54 @@ import { useActionOrder } from "../api/Orders/useAction";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function OrdersPage() {
   const { data: orders } = useFetchAllOrders();
   const [isOpen, setIsOpen] = useState(false);
   const { profile } = useProfileStore();
-  const { Payment } = usePaymentAction(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}payments`
-  );
+  // const { Payment } = usePaymentAction(
+  //   `${process.env.NEXT_PUBLIC_API_BASE_URL}payments`
+  // );
+  const router = useRouter();
   const { deleteOrder } = useActionOrder();
   const [id, setId] = useState("");
-  const handlePayment = (id: string) => {
-    const newTab = window.open("about:blank", "_blank");
 
-    if (!newTab) {
-      toast.error("Popup diblokir oleh browser. Silakan izinkan popup.");
-      return;
+  const handlePayment = (id: string, status: string) => {
+    if (status === "PAID") {
+      toast.error("Pesanan sudah dibayar.");
+    } else {
+      router.push(`/payment/${id}`);
     }
+    // const newTab = window.open("about:blank", "_blank");
 
-    // Jalankan permintaan async
-    Payment(
-      { order_id: id },
-      {
-        onSuccess: (data) => {
-          const url = data.data.invoice_url;
-          if (url) {
-            newTab.location.href = url;
-          } else {
-            newTab.close();
-            toast.error("URL invoice tidak tersedia.");
-          }
-        },
-        onError: (error) => {
-          const err = error as AxiosError<ErrorResponse>;
-          newTab.close();
-          toast.error(
-            err.response?.data.message || "Terjadi kesalahan saat pembayaran."
-          );
-        },
-      }
-    );
+    // if (!newTab) {
+    //   toast.error("Popup diblokir oleh browser. Silakan izinkan popup.");
+    //   return;
+    // }
+
+    // // Jalankan permintaan async
+    // Payment(
+    //   { order_id: id },
+    //   {
+    //     onSuccess: (data) => {
+    //       const url = data.data.invoice_url;
+    //       if (url) {
+    //         newTab.location.href = url;
+    //       } else {
+    //         newTab.close();
+    //         toast.error("URL invoice tidak tersedia.");
+    //       }
+    //     },
+    //     onError: (error) => {
+    //       const err = error as AxiosError<ErrorResponse>;
+    //       newTab.close();
+    //       toast.error(
+    //         err.response?.data.message || "Terjadi kesalahan saat pembayaran."
+    //       );
+    //     },
+    //   }
+    // );
   };
 
   const handleConfirm = async (id: string) => {
@@ -152,7 +160,12 @@ export default function OrdersPage() {
                         </Button>
                       </Link>
                       <button
-                        onClick={() => handlePayment(order.id)}
+                        onClick={() =>
+                          handlePayment(
+                            order.id,
+                            order.payment?.payment_status || ""
+                          )
+                        }
                         className={` drop-shadow-lg text-xs py-2 px-1 hover:drop-shadow-2xl rounded-lg border ${
                           order.payment?.payment_status === "PAID"
                             ? "text-green-500 border-green-600"

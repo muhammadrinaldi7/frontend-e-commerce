@@ -19,7 +19,7 @@ export const useProfileStore = create<ProfileState>()(
         set({ profile, isAuthenticated: true, isAdmin: profile.is_admin }),
       logout: () => {
         sessionStorage.removeItem("user");
-        set({ profile: null, isAuthenticated: false });
+        set({ profile: null, isAuthenticated: false, isAdmin: 0 });
       },
     }),
     {
