@@ -28,7 +28,7 @@ export default function DetailOrder() {
             Invoice Order #{detailOrder?.data.id}
           </h2>
           <p className="text-gray-600">
-            Tanggal: {detailOrder?.data.order_date}
+            Tanggal: {FormatDate(detailOrder?.data.order_date || "")}
           </p>
           {/* <p className="text-gray-600">Customer:</p> */}
           <p className="text-gray-600">

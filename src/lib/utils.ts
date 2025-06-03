@@ -34,10 +34,20 @@ export const proxiedUrl = (imageUrl: string | null | undefined) => {
   )}`;
 };
 
-export const FormatDate = (date: string) => {
-  return new Date(date).toLocaleDateString("id-ID", {
-    day: "numeric",
-    month: "long",
+export function FormatDate(dateString: string) {
+  if (!dateString) return "-";
+
+  const isoFixed = dateString.replace(" ", "T");
+
+  const date = new Date(isoFixed);
+
+  if (isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+
+  return date.toLocaleDateString("id-ID", {
     year: "numeric",
+    month: "long",
+    day: "numeric",
   });
-};
+}
