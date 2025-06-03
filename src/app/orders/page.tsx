@@ -137,7 +137,7 @@ export default function OrdersPage() {
                       </Link>
                       <button
                         onClick={() => handlePayment(order.id)}
-                        className={`p-2 drop-shadow-lg text-xs hover:drop-shadow-2xl rounded-lg border ${
+                        className={` drop-shadow-lg text-xs py-2 px-1 hover:drop-shadow-2xl rounded-lg border ${
                           order.payment?.payment_status === "PAID"
                             ? "text-green-500 border-green-600"
                             : "border-red-600 text-red-500"
