@@ -30,23 +30,33 @@ export default function OrdersPage() {
   );
   const { deleteOrder } = useActionOrder();
   const [id, setId] = useState("");
-  const handlePayment = async (id: string) => {
-    await Payment(
+  const handlePayment = (id: string) => {
+    const newTab = window.open("about:blank", "_blank");
+
+    if (!newTab) {
+      toast.error("Popup diblokir oleh browser. Silakan izinkan popup.");
+      return;
+    }
+
+    // Jalankan permintaan async
+    Payment(
       { order_id: id },
       {
         onSuccess: (data) => {
-          const newTab = window.open("", "_blank");
           const url = data.data.invoice_url;
-          if (url && newTab) {
+          if (url) {
             newTab.location.href = url;
           } else {
-            toast.error("error payment");
+            newTab.close();
+            toast.error("URL invoice tidak tersedia.");
           }
-          // window.open(data.data.invoice_url, "_blank", "noopener,noreferrer");
         },
         onError: (error) => {
           const err = error as AxiosError<ErrorResponse>;
-          toast.error(err.response?.data.message || "error");
+          newTab.close();
+          toast.error(
+            err.response?.data.message || "Terjadi kesalahan saat pembayaran."
+          );
         },
       }
     );
