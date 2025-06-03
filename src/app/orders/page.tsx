@@ -6,7 +6,11 @@ import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { useFetchAllOrders } from "../api/Orders/useFetch";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoneyBill1Wave, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMoneyBill1Wave,
+  faTrash,
+  faTruckDroplet,
+} from "@fortawesome/free-solid-svg-icons";
 import { usePaymentAction } from "../api/Payments/useAction";
 import { ErrorResponse } from "@/lib/types";
 import { AxiosError } from "axios";
@@ -14,6 +18,8 @@ import DeleteModal from "@/components/ModalsDelete";
 import { useState } from "react";
 import { useActionOrder } from "../api/Orders/useAction";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function OrdersPage() {
   const { data: orders } = useFetchAllOrders();
@@ -91,13 +97,12 @@ export default function OrdersPage() {
             {orders?.data.map((order, index) => (
               <li key={index}>
                 <div className="block h-full rounded-lg border border-indigo-600 p-4 hover:border-pink-600">
-                  <div className="flex gap-2 items-center justify-between">
+                  <div className="flex flex-col gap-1 items-start justify-center">
                     <div>
                       <strong className="font-medium text-indigo-600">
                         {`#${order.order_date.split("T")[0]}`}
                       </strong>
-
-                      <p className="mt-1 text-xs font-medium text-gray-300">
+                      <p className="mt-1 text-sm font-medium text-gray-300">
                         {order.details
                           .map(
                             (detail) =>
@@ -107,7 +112,10 @@ export default function OrdersPage() {
                           )
                           .join(", ")}
                       </p>
-                      <p className="mt-1 text-xs items-center flex gap-2 font-medium text-gray-300">
+                      <div className="mt-1 text-sm items-center flex gap-2 font-medium text-gray-300">
+                        {FormatRupiah(order.total_price)}{" "}
+                      </div>
+                      {/* <p className="mt-1 text-xs items-center flex gap-2 font-medium text-gray-300">
                         {FormatRupiah(order.total_price)}{" "}
                         <span
                           className={`rounded-full  px-2.5 items-center py-0.5 text-sm whitespace-nowrap ${
@@ -118,22 +126,31 @@ export default function OrdersPage() {
                         >
                           {order.status}
                         </span>
-                      </p>
+                      </p> */}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-end w-full justify-end">
+                      <Link href={`/orders/${order.id}`}>
+                        <Button className="text-xs hover:drop-shadow-md outline-none focus:ring-2 focus:ring-indigo-500 hover:bg-indigo-600 hover:text-white rounded-lg border border-indigo-600 text-indigo-600 bg-white">
+                          Cek Status{" "}
+                          <FontAwesomeIcon icon={faTruckDroplet} size="lg" />
+                        </Button>
+                      </Link>
                       <button
                         onClick={() => handlePayment(order.id)}
-                        className={`p-2 drop-shadow-lg hover:drop-shadow-2xl rounded-lg border ${
+                        className={`p-2 drop-shadow-lg text-xs hover:drop-shadow-2xl rounded-lg border ${
                           order.payment?.payment_status === "PAID"
                             ? "text-green-500 border-green-600"
                             : "border-red-600 text-red-500"
                         }`}
                       >
+                        {order.payment?.payment_status === "PAID"
+                          ? "PAID"
+                          : "UNPAID"}{" "}
                         <FontAwesomeIcon icon={faMoneyBill1Wave} size="lg" />
                       </button>
                       <button
                         onClick={() => handleOpen(order.id)}
-                        className={`p-2 drop-shadow-lg hover:drop-shadow-2xl rounded-lg border border-red-500 text-red-500`}
+                        className={`p-2 drop-shadow-lg text-xs hover:drop-shadow-2xl rounded-lg border border-red-500 text-red-500`}
                       >
                         <FontAwesomeIcon icon={faTrash} size="lg" />
                       </button>

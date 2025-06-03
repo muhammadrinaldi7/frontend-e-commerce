@@ -25,3 +25,15 @@ export const useFetchOrdersAll = () => {
     },
   });
 };
+
+export const useFetchDetailOrder = (url: string) => {
+  return useQuery({
+    queryKey: ["detailOrder"],
+    queryFn: async () => {
+      const res = await axiosClient.get<ResponseDefault<OrdersResponse>>(
+        `${url}`
+      );
+      return res.data;
+    },
+  });
+};
