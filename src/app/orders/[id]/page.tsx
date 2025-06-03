@@ -102,7 +102,7 @@ export default function DetailOrder() {
 
           <div className="mt-4">
             <time className="text-xs/none font-medium text-gray-700">
-              {FormatDate(detailOrder?.data.order_date.toString() || "")}
+              {FormatDate(detailOrder?.data.order_date || "")}
             </time>
 
             <h3 className="text-lg font-bold text-gray-900">Order</h3>
@@ -116,7 +116,7 @@ export default function DetailOrder() {
 
             <div className="mt-4">
               <time className="text-xs/none font-medium text-gray-700">
-                {FormatDate(detailOrder?.data.payment.payment_date.toString())}
+                {FormatDate(detailOrder?.data.payment.payment_date || "")}
               </time>
 
               <h3 className="text-lg font-bold text-gray-900">Dibayar</h3>
@@ -141,7 +141,7 @@ export default function DetailOrder() {
 
             <div className="mt-4">
               <time className="text-xs/none font-medium text-gray-700">
-                {FormatDate(detailOrder?.data.payment.payment_date.toString())}
+                {FormatDate(detailOrder?.data.payment.payment_date || "")}
               </time>
 
               <h3 className="text-lg font-bold text-gray-900">DIKIRIM</h3>
