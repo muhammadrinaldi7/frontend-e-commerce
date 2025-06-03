@@ -10,7 +10,6 @@ export default function DetailOrder() {
   const { data: detailOrder } = useFetchDetailOrder(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}orders/${id}`
   );
-  const date = new Date(Date.now());
   return (
     <div className="mx-auto container w-full flex justify-center flex-col gap-4 px-4 py-20">
       <BreadcrumbsSeparator
@@ -105,7 +104,7 @@ export default function DetailOrder() {
               {FormatDate(detailOrder?.data.order_date || "")}
             </time>
 
-            <h3 className="text-lg font-bold text-gray-900">Order</h3>
+            <h3 className="text-sm font-bold text-gray-900">Order</h3>
           </div>
         </li>
 
@@ -119,7 +118,7 @@ export default function DetailOrder() {
                 {FormatDate(detailOrder?.data.payment.payment_date || "")}
               </time>
 
-              <h3 className="text-lg font-bold text-gray-900">Dibayar</h3>
+              <h3 className="text-sm font-bold text-gray-900">Dibayar</h3>
             </div>
           </li>
         ) : (
@@ -128,10 +127,10 @@ export default function DetailOrder() {
 
             <div className="mt-4">
               <time className="text-xs/none font-medium text-gray-700/70">
-                {FormatDate(date.toString())}
+                {FormatDate(new Date().toISOString())}
               </time>
 
-              <h3 className="text-lg font-bold text-gray-900">Belum Dibayar</h3>
+              <h3 className="text-sm font-bold text-gray-900">Belum Dibayar</h3>
             </div>
           </li>
         )}
@@ -144,7 +143,7 @@ export default function DetailOrder() {
                 {FormatDate(detailOrder?.data.payment.payment_date || "")}
               </time>
 
-              <h3 className="text-lg font-bold text-gray-900">DIKIRIM</h3>
+              <h3 className="text-sm font-bold text-gray-900">DIKIRIM</h3>
             </div>
           </li>
         ) : (
@@ -153,10 +152,10 @@ export default function DetailOrder() {
 
             <div className="mt-4">
               <time className="text-xs/none font-medium text-gray-700/70">
-                {FormatDate(date.toString())}
+                {FormatDate(new Date().toISOString())}
               </time>
 
-              <h3 className="text-lg font-bold text-gray-900">Belum DIkirim</h3>
+              <h3 className="text-sm font-bold text-gray-900">Belum DIkirim</h3>
             </div>
           </li>
         )}
