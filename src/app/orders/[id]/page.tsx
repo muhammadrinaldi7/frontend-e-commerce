@@ -135,7 +135,7 @@ export default function DetailOrder() {
             </div>
           </li>
         )}
-        {detailOrder?.data.status === "DELIVERED" ? (
+        {detailOrder?.data.status.toLocaleUpperCase() === "DELIVERED" ? (
           <li className="relative -mt-1.5">
             <span className="block size-3 rounded-full bg-indigo-600"></span>
 
