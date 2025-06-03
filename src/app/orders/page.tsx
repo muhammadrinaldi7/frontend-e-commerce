@@ -39,6 +39,8 @@ export default function OrdersPage() {
           const url = data.data.invoice_url;
           if (url && newTab) {
             newTab.location.href = url;
+          } else {
+            toast.error("error payment");
           }
           // window.open(data.data.invoice_url, "_blank", "noopener,noreferrer");
         },
