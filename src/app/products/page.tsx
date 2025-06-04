@@ -13,9 +13,9 @@ import { useMemo, useState } from "react";
 import { ProductResponse } from "@/lib/types";
 import { useFetchAllCategories } from "../api/Category/useFetch";
 import { CartItem, useCartStore } from "@/store/useCartStore";
-import Link from "next/link";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 export default function ProductsPage() {
   const [searchProduct, setSearchProduct] = useState("");
   const [categoryId, setCategoryId] = useState("");
@@ -43,6 +43,7 @@ export default function ProductsPage() {
     addToCart(product);
     triggerShake();
   };
+  const router = useRouter();
   return (
     <section>
       <div className="mx-auto max-w-screen-xl min-h-screen flex flex-col px-4 py-20">
@@ -104,16 +105,18 @@ export default function ProductsPage() {
                 transition={{ duration: 1, ease: "easeOut" }}
                 viewport={{ once: false }}
               >
-                <Link
-                  href={`/products/${product.id}`}
-                  className="group block overflow-hidden"
+                <div
+                  className={`group block overflow-hidden ${
+                    product.qty === 0 ? "opacity-50 grayscale-75" : ""
+                  }`}
                 >
                   <Image
                     width={1000}
                     height={1000}
+                    onClick={() => router.push(`/products/${product.id}`)}
                     src={proxiedUrl(product.image_product)}
                     alt={product.product_name}
-                    className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
+                    className="h-[150px] cursor-pointer w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                   />
                   <div className="relative bg-white pt-3">
                     <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
@@ -126,6 +129,7 @@ export default function ProductsPage() {
                         </span>
                       </p>
                       <button
+                        disabled={product.qty === 0}
                         onClick={() =>
                           handleAddToCart({
                             product_id: product.id,
@@ -138,7 +142,7 @@ export default function ProductsPage() {
                       </button>
                     </div>
                   </div>
-                </Link>
+                </div>
               </motion.li>
             ))
           )}

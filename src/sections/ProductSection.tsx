@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 export default function ProductSection() {
   const { data: products, isLoading } = useFetchAllProducts(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}products`
@@ -18,6 +19,7 @@ export default function ProductSection() {
     addToCart(product);
     triggerShake();
   };
+  const router = useRouter();
   return (
     <section id="product">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -41,35 +43,36 @@ export default function ProductSection() {
           {productsData?.map((product, index) => (
             <motion.li
               key={index}
-              initial={{ opacity: 0, y: 20, scale: 0.5 }}
+              initial={{ opacity: 0, y: 20, scale: 0.5 }} // animasi awal
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 1, ease: "easeOut" }}
               viewport={{ once: false }}
             >
-              <Link
-                href={`/products/${product.id}`}
-                className="group block overflow-hidden"
+              <div
+                className={`group block overflow-hidden ${
+                  product.qty === 0 ? "opacity-50 grayscale-75" : ""
+                }`}
               >
                 <Image
                   width={1000}
                   height={1000}
+                  onClick={() => router.push(`/products/${product.id}`)}
                   src={proxiedUrl(product.image_product)}
                   alt={product.product_name}
-                  className="h-[150px] w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
+                  className="h-[150px] cursor-pointer w-full object-cover transition duration-500 group-hover:scale-105 sm:h-[450px]"
                 />
-
                 <div className="relative bg-white pt-3">
                   <h3 className="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
                     {product.product_name}
                   </h3>
                   <div className="flex justify-between items-center">
                     <p className="mt-2">
-                      <span className="sr-only"> Harga </span>
                       <span className="tracking-wider text-gray-900">
                         {FormatRupiah(product.price)}
                       </span>
                     </p>
                     <button
+                      disabled={product.qty === 0}
                       onClick={() =>
                         handleAddToCart({
                           product_id: product.id,
@@ -78,12 +81,11 @@ export default function ProductSection() {
                       }
                       className="p-2 text-sm cursor-pointer rounded-lg border-indigo-600 hover:bg-blue-600 hover:text-white border text-indigo-600 drop-shadow-xl"
                     >
-                      Add to Cart{" "}
-                      <FontAwesomeIcon icon={faCartPlus} className="" />
+                      Add to Cart <FontAwesomeIcon icon={faCartPlus} />
                     </button>
                   </div>
                 </div>
-              </Link>
+              </div>
             </motion.li>
           ))}
         </ul>
