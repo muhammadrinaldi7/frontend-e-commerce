@@ -4,6 +4,7 @@ import "./globals.css";
 import MainLayout from "@/layouts/mainLayout";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Toaster } from "react-hot-toast";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} scroll-smooth ${geistMono.variable} antialiased`}
       >
         <Navbar />
+        <Toaster position="top-right" />
         <MainLayout>{children}</MainLayout>
         <Footer />
       </body>

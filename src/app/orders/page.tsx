@@ -36,6 +36,10 @@ export default function OrdersPage() {
   const handlePayment = (id: string, status: string) => {
     if (status === "PAID") {
       toast.error("Pesanan sudah dibayar.");
+    } else if (status === "EXPIRED") {
+      toast.error(
+        "Pesanan sudah kadaluarsa, silahkan hapus dan buat pesanan baru."
+      );
     } else {
       router.push(`/payment/${id}`);
     }

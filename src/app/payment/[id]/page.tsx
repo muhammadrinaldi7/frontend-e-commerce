@@ -4,8 +4,11 @@ import { usePaymentAction } from "@/app/api/Payments/useAction";
 import { BreadcrumbsSeparator } from "@/components/BreadCrumbSp";
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import { ErrorResponse } from "@/lib/types";
+import { AxiosError } from "axios";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function PaymentPage() {
   const { id } = useParams();
@@ -14,7 +17,7 @@ export default function PaymentPage() {
   const { Payment, loadingPayment } = usePaymentAction(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}payments`
   );
-
+  const router = useRouter();
   const handlePayment = (id: string) => {
     setFormBayar(true);
     Payment(
@@ -26,6 +29,10 @@ export default function PaymentPage() {
             setInvoiceUrl(url);
           }
         },
+        onError: (err) => {
+          const error = err as AxiosError<ErrorResponse>;
+          toast.error(error.response?.data.message || "error");
+        },
       }
     );
   };
@@ -35,11 +42,20 @@ export default function PaymentPage() {
         <BreadcrumbsSeparator
           items={[{ label: "Pesanan", href: "/orders" }, { label: "Payment" }]}
         />
-        <h1 className="text-2xl font-semibold text-center text-gray-800">
+        <h1 className="text-2xl font-semibold text-left text-gray-800">
           Payment Invoice #{id}
         </h1>
 
-        <div className="flex justify-center">
+        <div className="flex justify-between">
+          <Button
+            onClick={() => {
+              setFormBayar(false);
+              router.back();
+            }}
+            className="bg-indigo-600 text-white hover:bg-white hover:text-indigo-600 hover:border-indigo-600 hover:border rounded-md px-6 py-2 transition-all duration-200"
+          >
+            Kembali
+          </Button>
           <Button
             onClick={() => handlePayment(id as string)}
             className="bg-indigo-600 text-white hover:bg-white hover:text-indigo-600 hover:border-indigo-600 hover:border rounded-md px-6 py-2 transition-all duration-200"
@@ -62,6 +78,9 @@ export default function PaymentPage() {
             <Spinner />
           </div>
         ) : null}
+        <p className="text-xs text-left text-gray-500">
+          *Jika invoice expired, hapus pesanan dan buat pesanan baru.
+        </p>
       </div>
     </>
   );
